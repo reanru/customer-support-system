@@ -43,7 +43,7 @@ export default function Sidebar({open, handleOpen}: SidebarProps) {
                             +(open ? "transition ease-in-out duration-500 translate-x-0" : "transition ease-in-out duration-500 -translate-x-[420px] ")
                             }>
                 <div className="flex justify-center items-center h-20">
-                    <span className="text-lg font-semibold text-blue-600">CS SYSTEM</span>
+                    <span className="text-lg font-semibold text-blue-600">CEESYS</span>
                 </div>
 
                 <div className="flex flex-col items-center space-y-2">
