@@ -24,20 +24,18 @@ export default function RootLayout({
     
     <html lang="en">
       <body
-        className=""
+        className="bg-slate-100"
       >
 
-        <div className="bg-slate-100">
-          <div className="flex h-full gap-4">
-            <Sidebar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
+        <div className="flex h-full gap-4">
+          <Sidebar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
 
-            <div className="relative flex flex-1 gap-4 flex-col">
-              <Navbar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
+          <div className="relative flex flex-1 gap-4 flex-col">
+            <Navbar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
 
-                <main className="px-1">
-                  {children}
-                </main>
-            </div>
+              <main className="pl-1 pr-5">
+                {children}
+              </main>
           </div>
         </div>
 
