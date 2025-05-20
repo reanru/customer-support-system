@@ -39,7 +39,7 @@ export default function Sidebar({open, handleOpen}: SidebarProps) {
     return (
         <>
             <div className="hidden lg:block min-w-72 w-72"></div>
-            <div ref={ref} className={"fixed lg:translate-x-0 lg:block lg:fixed lg:left-0 lg:top-0 h-full w-72 bg-white rounded-r-2xl shadow-xs z-10 "
+            <div ref={ref} className={"fixed lg:translate-x-0 lg:block lg:fixed lg:left-0 lg:top-0 h-full w-72 bg-white rounded-r-2xl shadow-sm z-10 "
                             +(open ? "transition ease-in-out duration-500 translate-x-0" : "transition ease-in-out duration-500 -translate-x-[420px] ")
                             }>
                 <div className="flex justify-center items-center h-20">
