@@ -1,90 +1,88 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-// import { useSelector, useDispatch } from 'react-redux'
+
 import { getListAgent } from '@/lib/redux/features/agent/agentSlice'
+
+import { FaPlusSquare } from "react-icons/fa";
+
+import ModalCreate from "@/lib/UI/agent/modalCreate";
+
+type Agent = {
+    id: string,
+    name: string,
+    email: string,
+    role: string,
+    created_at: string,
+    updated_at: string
+}
 
 export default function AgentPage() {
     const get_list_agent = useAppSelector((state) => state.get_list_agent)
-    // const dispatch = useDispatch()
     const dispatch = useAppDispatch();
+
+    const [listAgent, setListAgent] = useState([]);
+    const [openModalCreate, setOpenModalCreate] = useState(false);
 
     useEffect(() => {        
         dispatch(getListAgent());
     }, [])
 
     useEffect(() => {
-        console.log('testing check ', get_list_agent);
+        if(get_list_agent.success){
+            // console.log('testing check ', get_list_agent.data.data);
+            setListAgent(get_list_agent.data.data);
+        }
     }, [get_list_agent])
     
-    
     return (
-        <div>
-            <div className="card relative overflow-x-auto">
+        <>
+            { openModalCreate && (
+                <ModalCreate handleClose={()=>setOpenModalCreate(false)} />
+            ) }
+            <div className="card relative overflow-x-auto space-y-2">
+                <button onClick={()=>setOpenModalCreate(true)} type="button" className="btn-primary">
+                    <span>Create</span>
+                    <FaPlusSquare />
+                </button>
                 <table className="border border-gray-100 w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
                             <th scope="col" className="px-6 py-3">
-                                Product name
+                                Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Color
+                                Email
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Category
+                                Role
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Price
+                                #
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-white border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td className="px-6 py-4">
-                                Silver
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td className="px-6 py-4">
-                                $2999
-                            </td>
-                        </tr>
-                        <tr className="bg-white border-b border-gray-200">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Microsoft Surface Pro
-                            </th>
-                            <td className="px-6 py-4">
-                                White
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop PC
-                            </td>
-                            <td className="px-6 py-4">
-                                $1999
-                            </td>
-                        </tr>
-                        <tr className="bg-white">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Magic Mouse 2
-                            </th>
-                            <td className="px-6 py-4">
-                                Black
-                            </td>
-                            <td className="px-6 py-4">
-                                Accessories
-                            </td>
-                            <td className="px-6 py-4">
-                                $99
-                            </td>
-                        </tr>
+                        { listAgent.map((data : Agent, key) => (
+                            <tr key={key} className="bg-white border-b border-gray-200">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    { data.name ?? '-' }
+                                </th>
+                                <td className="px-6 py-4">
+                                    { data.email ?? '-' }
+                                </td>
+                                <td className="px-6 py-4">
+                                    { data.role ?? '-' }
+                                </td>
+                                <td className="px-6 py-4">
+                                    -
+                                </td>
+                            </tr>
+                        )) }
                     </tbody>
                 </table>
             </div>
-        </div>
+        </>
     )
 }

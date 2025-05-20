@@ -37,7 +37,7 @@ export default function RootLayout({
               <div className="relative flex flex-1 gap-4 flex-col">
                 <Navbar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
 
-                  <main className="pl-1 pr-5">
+                  <main className="pl-5 lg:pl-1 pr-5">
                     {children}
                   </main>
               </div>

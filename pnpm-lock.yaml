@@ -37,6 +37,9 @@ importers:
       redux:
         specifier: ^5.0.1
         version: 5.0.1
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3

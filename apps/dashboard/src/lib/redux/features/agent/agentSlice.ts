@@ -53,7 +53,7 @@ const agentSlice = createSlice({
         })
         .addCase(getListAgent.fulfilled, (state, action) => {
             state.loading = false;
-            state.data = action.payload;
+            state.data = action.payload.data;
             state.success = true;
         })
         .addCase(getListAgent.rejected, (state, action) => {
