@@ -9,6 +9,9 @@ publicRouter.get('/', (req, res) => {
 });
 
 publicRouter.get('/api/users', userController.get);
+publicRouter.post('/api/users', userController.create);
+publicRouter.put('/api/users/:userId', userController.update);
+publicRouter.delete('/api/users/:userId', userController.remove);
 
 export {
     publicRouter

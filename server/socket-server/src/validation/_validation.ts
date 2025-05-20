@@ -1,6 +1,6 @@
 import { ResponseError } from "../error/response-error";
 
-const validate = (schema: any, request: any) => {
+const validate = <T>(schema: any, request: T) => {
     const result = schema.validate(request, {
         abortEarly: false, // lanjutkan semua validasi, jika terdapat error
         allowUnknown: false // reject field yg tidak diketahui
