@@ -10,12 +10,6 @@ type GetType = {
     size: number
 }
 
-type CreateType = {
-    name: string | null,
-    email: string | null,
-    tole: string | null
-}
-
 const get = async (request: GetType) => {
 
     const skip = (request.page - 1) * request.size;

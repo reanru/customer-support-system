@@ -1,6 +1,6 @@
 import express from "express";
 
-import userController from "../controller/user-controller"
+import authController from "../controller/auth-controller";
 
 const publicRouter = express.Router();
 
@@ -8,10 +8,9 @@ publicRouter.get('/', (req, res) => {
     res.send('Hello from Express + Prisma! Testing');
 });
 
-publicRouter.get('/api/users', userController.get);
-publicRouter.post('/api/users', userController.create);
-publicRouter.put('/api/users/:userId', userController.update);
-publicRouter.delete('/api/users/:userId', userController.remove);
+publicRouter.post('/api/users/generate-admin', authController.generateAdmin);
+
+publicRouter.post('/api/users/login', authController.login);
 
 export {
     publicRouter

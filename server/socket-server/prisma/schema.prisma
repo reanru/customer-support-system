@@ -15,9 +15,10 @@ datasource db {
 }
 
 model User {
-  id          String     @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String?
   email       String?
+  password    String?   
   role        Role     @default(USER) // 'ADMIN' | 'AGENT' | 'USER'
   sessions    Session[]
   messages    Message[]
