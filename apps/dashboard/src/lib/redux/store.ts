@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import agentReducer from './features/agent/agentSlice'
+import getListUserReducer from './features/user/getListUserSlice'
+import addNewUserReducer from './features/user/addNewUserSlice'
+import deleteUserReducer from "./features/user/deleteUserSlice";
 
 const store = configureStore({
   reducer: {
-    get_list_agent: agentReducer
+    get_list_user: getListUserReducer,
+    add_new_user: addNewUserReducer,
+    delete_user: deleteUserReducer
   }
 });
 

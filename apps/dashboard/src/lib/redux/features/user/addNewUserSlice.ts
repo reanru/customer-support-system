@@ -1,23 +1,29 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-type ListAgent = {
+type InitState = {
   loading: boolean;
   data: any | null;
   error: string | null;
   success: boolean;
 }
 
-const initialState: ListAgent = {
+const initialState: InitState = {
   loading: false,
   data: null,
   error: null,
   success: false,
 };
 
-export const getListAgent = createAsyncThunk(
-    'agent/getListAgent',
-    async(_, { getState, rejectWithValue }) => {
+type NewUser = {
+    name?: string,
+    email?: string,
+    role?: string
+}
+
+export const addNewUser = createAsyncThunk(
+    'user/addNewUser',
+    async(data: NewUser, { getState, rejectWithValue }) => {
         try {
             const CONFIG = {
                 headers: {
@@ -25,7 +31,7 @@ export const getListAgent = createAsyncThunk(
                 }
             }
 
-            const res = await axios.get('http://localhost:3001/api/users?page=1&size=10', CONFIG);
+            const res = await axios.post('http://localhost:3001/api/users', data, CONFIG);
             return res.data;
         } catch (error: any) {
             const message =
@@ -35,11 +41,11 @@ export const getListAgent = createAsyncThunk(
     }
 )
 
-const agentSlice = createSlice({
-    name: 'agent',
+const addNewUserSlice = createSlice({
+    name: 'addUser',
     initialState,
     reducers: {
-        resetGetListAgent: (state) => {
+        resetAddNewUser: (state) => {
             state.loading = false;
             state.data = null;
             state.error = null;
@@ -47,21 +53,21 @@ const agentSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(getListAgent.pending, (state) => {
+        .addCase(addNewUser.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
-        .addCase(getListAgent.fulfilled, (state, action) => {
+        .addCase(addNewUser.fulfilled, (state, action) => {
             state.loading = false;
             state.data = action.payload.data;
             state.success = true;
         })
-        .addCase(getListAgent.rejected, (state, action) => {
+        .addCase(addNewUser.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
-        });
+        })
     }
 });
 
-export const { resetGetListAgent } = agentSlice.actions;
-export default agentSlice.reducer;
+export const { resetAddNewUser } = addNewUserSlice.actions;
+export default addNewUserSlice.reducer;

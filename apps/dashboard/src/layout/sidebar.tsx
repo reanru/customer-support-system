@@ -2,15 +2,18 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 
+import Link from "next/link"
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { LuUsers, LuLogs } from "react-icons/lu";
 import { PiGear } from "react-icons/pi";
 
 const menus = [
-    { text: "Dashboard", icon: <MdOutlineDashboardCustomize className="text-xl" /> },
-    { text: "Agent", icon: <LuUsers className="text-xl" /> },
-    { text: "Logs", icon: <LuLogs className="text-xl" /> },
-    { text: "Setting", icon: <PiGear className="text-xl" /> },
+    { text: "Dashboard", link: '/', icon: <MdOutlineDashboardCustomize className="text-xl" /> },
+    { text: "User", link: '/user', icon: <LuUsers className="text-xl" /> },
+    { text: "Logs", link: '/logs', icon: <LuLogs className="text-xl" /> },
+    { text: "Setting", link: '/setting', icon: <PiGear className="text-xl" /> },
 ]
 
 type SidebarProps = {
@@ -21,8 +24,12 @@ type SidebarProps = {
 export default function Sidebar({open, handleOpen}: SidebarProps) {
     let ref= useRef<HTMLDivElement>(null);
 
-    const [active, setActive] = useState("Dashboard");
+    const pathname = usePathname()
 
+    // const [active, setActive] = useState("Dashboard");
+
+    console.log('testing check ', pathname);
+    
     const handleClickOutside = (event: any) => {
         if (ref.current && !ref.current.contains(event.target)) {
             if(open) handleOpen();
@@ -48,13 +55,13 @@ export default function Sidebar({open, handleOpen}: SidebarProps) {
 
                 <div className="flex flex-col items-center space-y-2">
                     { menus.map((data,key) => (
-                        <div 
-                            key={key} 
-                            className={"flex items-center w-10/12 py-3 px-4 gap-3 rounded-2xl "+(active===data.text ? "bg-blue-600 text-white hover:bg-blue-400" : "text-slate-400 hover:text-white hover:bg-blue-400")}
-                            onClick={()=>setActive(data.text)}
+                        <Link 
+                            key={key}
+                            href={data.link}
+                            className={"sidebar "+(pathname===data.link ? "sidebar-active" : "")}
                         >
                             { data.icon } <span className="text-sm font-light">{ data.text }</span>
-                        </div>
+                        </Link>
                     )) }
                 </div>
             </div>

@@ -3,45 +3,68 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 
-import { getListAgent } from '@/lib/redux/features/agent/agentSlice'
+import { getListUser, resetGetListUser } from '@/lib/redux/features/user/getListUserSlice'
 
-import { FaPlusSquare } from "react-icons/fa";
+import { FaPlusSquare, FaRegTrashAlt } from "react-icons/fa";
 
-import ModalCreate from "@/lib/UI/agent/modalCreate";
+import ModalCreate from "@/lib/UI/user/modalCreate";
+import ModalDelete from "@/lib/UI/user/modalDelete";
 
-type Agent = {
-    id: string,
-    name: string,
-    email: string,
-    role: string,
-    created_at: string,
-    updated_at: string
+type User = {
+    id?: string,
+    name?: string,
+    email?: string,
+    role?: string,
+    created_at?: string,
+    updated_at?: string
 }
 
-export default function AgentPage() {
-    const get_list_agent = useAppSelector((state) => state.get_list_agent)
+export default function UserPage() {
+    const get_list_user = useAppSelector((state) => state.get_list_user);
+    const add_new_user = useAppSelector((state) => state.add_new_user);
+    const delete_user = useAppSelector((state) => state.delete_user);
+
     const dispatch = useAppDispatch();
 
-    const [listAgent, setListAgent] = useState([]);
+    const [listUser, setListUser] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User>({});
 
     useEffect(() => {        
-        dispatch(getListAgent());
+        dispatch(getListUser());
     }, [])
 
     useEffect(() => {
-        if(get_list_agent.success){
-            // console.log('testing check ', get_list_agent.data.data);
-            setListAgent(get_list_agent.data.data);
+        if(get_list_user.success){
+            // console.log('testing check 1', get_list_user);
+            setListUser(get_list_user.data.data);
         }
-    }, [get_list_agent])
+    }, [get_list_user])
+
+    useEffect(() => {
+        if(add_new_user.success){
+            dispatch(getListUser());
+        }
+    }, [add_new_user])
+
+    useEffect(() => {
+        if(delete_user.success){
+            dispatch(getListUser());
+        }
+    }, [delete_user])
     
     return (
         <>
             { openModalCreate && (
                 <ModalCreate handleClose={()=>setOpenModalCreate(false)} />
             ) }
-            <div className="card relative overflow-x-auto space-y-2">
+
+            { openModalDelete && (
+                <ModalDelete handleClose={()=>setOpenModalDelete(false)} id={selectedUser?.id ?? ''} />
+            ) }
+
+            <div className="card relative overflow-x-auto space-y-3">
                 <button onClick={()=>setOpenModalCreate(true)} type="button" className="btn-primary">
                     <span>Create</span>
                     <FaPlusSquare />
@@ -64,7 +87,7 @@ export default function AgentPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        { listAgent.map((data : Agent, key) => (
+                        { listUser.map((data : User, key) => (
                             <tr key={key} className="bg-white border-b border-gray-200">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     { data.name ?? '-' }
@@ -76,7 +99,12 @@ export default function AgentPage() {
                                     { data.role ?? '-' }
                                 </td>
                                 <td className="px-6 py-4">
-                                    -
+                                    <button onClick={()=>{
+                                        setOpenModalDelete(true);
+                                        setSelectedUser(data);
+                                    }} type="button" className="btn-secondary">
+                                        <FaRegTrashAlt />
+                                    </button>
                                 </td>
                             </tr>
                         )) }

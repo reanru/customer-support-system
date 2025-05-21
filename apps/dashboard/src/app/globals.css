@@ -8,7 +8,7 @@
   }
 
     .btn-primary { 
-      @apply transition-all flex items-center justify-center h-7 px-2 space-x-1 shadow-sm text-sm font-medium rounded-lg bg-blue-500 hover:bg-blue-400 active:bg-blue-500 text-white ring-1 ring-blue-500 hover:ring-blue-400 active:ring-0 cursor-pointer
+      @apply transition-all flex items-center justify-center min-w-14 h-7 px-2 space-x-1 shadow-sm text-sm font-medium rounded-lg bg-blue-500 hover:bg-blue-400 active:bg-blue-500 text-white ring-1 ring-blue-500 hover:ring-blue-400 active:ring-0 cursor-pointer
     }
 
     .btn-secondary { 
@@ -17,6 +17,14 @@
 
     .form-control {
       @apply block w-full rounded-lg bg-white px-3 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6
+    }
+
+    .sidebar {
+      @apply transition-all flex items-center w-10/12 py-3 px-4 gap-3 rounded-2xl text-slate-400 hover:text-white hover:ring-1 hover:bg-blue-400 hover:ring-blue-400 active:ring-0
+    }
+
+    .sidebar-active {
+      @apply bg-blue-600 text-white hover:bg-blue-400 ring-1 ring-blue-600
     }
 }
 
