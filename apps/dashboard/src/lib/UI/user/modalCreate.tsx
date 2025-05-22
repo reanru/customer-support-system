@@ -62,9 +62,9 @@ export default function ModalCreate({ handleClose } : ModalProps) {
     const validate = (value: User) => {
         const error: User = {};
 
-        if(!value.name) error.name = "Tidak boleh kosong";
-        if(!value.email) error.email = "Tidak boleh kosong";
-        if(!value.role) error.role = "Tidak boleh kosong";
+        if(!value.name) error.name = "Cannot be empty";
+        if(!value.email) error.email = "Cannot be empty";
+        if(!value.role) error.role = "Cannot be empty";
         
         setErrors(error);
 

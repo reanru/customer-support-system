@@ -8,6 +8,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         res.status(401).json({
             errors: "Require access token"
         });
+        return
     }
 
     try {
@@ -17,6 +18,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     } catch (error) {
         res.status(401).json({
             message: 'Unauthorized'
-        })
+        });
+        return
     }    
 }
