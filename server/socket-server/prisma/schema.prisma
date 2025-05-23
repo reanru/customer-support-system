@@ -20,7 +20,7 @@ model User {
   email       String?
   password    String?   
   role        Role     @default(USER) // 'ADMIN' | 'AGENT' | 'USER'
-  sessions    Session[]
+  // sessions    Session[]
   messages    Message[]
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
@@ -30,8 +30,8 @@ model User {
 
 model Session {
   id          String   @id @default(uuid())
-  user_id     String?
-  user        User?    @relation(fields: [user_id], references: [id])
+  // user_id     String?
+  // user        User?    @relation(fields: [user_id], references: [id])
   visitorId   String?  // Untuk sesi anonim
   isActive    Boolean  @default(true)
   messages    Message[]
