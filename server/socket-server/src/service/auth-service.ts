@@ -27,7 +27,7 @@ const login = async (request: Request) => {
 
     const user = await prismaClient.user.findFirst({
         where: {
-            email: loginRequest.username
+            email: loginRequest.email
         },
         select: {
             id: true,
@@ -39,13 +39,13 @@ const login = async (request: Request) => {
     });
     
     if(!user){
-        throw new ResponseError(401, "Username or password wrong");
+        throw new ResponseError(401, "Email or password wrong");
     }
 
     const isPasswordValid = await bcrypt.compare(loginRequest.password, user.password ?? '');
 
     if(!isPasswordValid){
-        throw new ResponseError(401, "Username or password wrong");
+        throw new ResponseError(401, "Email or password wrong");
     }
 
     const expiresIn = 60*60*1;

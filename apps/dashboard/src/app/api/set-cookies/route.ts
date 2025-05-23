@@ -22,3 +22,14 @@ export async function GET() {
 
   return Response.json({ token: cookie?.value });
 }
+
+export async function DELETE() {
+  const cookieStore = await cookies();
+  // const token = cookies().get('token')?.value;
+
+  const cookie = cookieStore.delete('token');
+
+  return new Response('Successfully delete cookies', {
+    status: 200,
+  })
+}
