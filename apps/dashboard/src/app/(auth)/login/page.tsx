@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { redirect } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 
-import { loginUser, resetLoginUser } from '@/lib/redux/features/login/loginUserSlice';
+import { loginUser, resetLoginUser } from '@/lib/redux/features/auth/slice/loginUserSlice';
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { BiSolidMessageSquareDots } from "react-icons/bi";
+import { RiCustomerService2Line } from "react-icons/ri";
+import { useRouter } from 'next/navigation';
 
 type Credential = {
     email?: string,
@@ -16,6 +19,7 @@ type Credential = {
 export default function LoginPage() {
     const login_user = useAppSelector((state) => state.login_user)
     const dispatch = useAppDispatch();
+    const router = useRouter()
 
     const [isSubmit, setIsSubmit] = useState(false);
     const [errors, setErrors] = useState<Credential>({});
@@ -27,7 +31,8 @@ export default function LoginPage() {
             // console.log('testing add ', add_new_user);
             setIsSubmit(false);
 
-            redirect(`/`);
+            // redirect(`/`);
+            window.location.href = '/';
         }
         else if(login_user.error && isSubmit === true)
         {
@@ -62,9 +67,11 @@ export default function LoginPage() {
 
     return (
         <>
-            <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
-                <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
-                CEESYS    
+            <a href="#" className="flex gap-1 items-center mb-6 text-2xl font-semibold text-gray-900">
+                <div className="flex justify-center items-center h-7 w-8 bg-blue-600 rounded-tl-xl rounded-br-xl rounded-tr-xl">
+                    <RiCustomerService2Line className="text-xl text-white" />
+                </div>
+                <span>CEESYS</span>    
             </a>
             <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

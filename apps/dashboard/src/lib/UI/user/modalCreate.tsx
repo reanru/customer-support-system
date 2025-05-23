@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 
-import { addNewUser, resetAddNewUser } from '@/lib/redux/features/user/addNewUserSlice'
+import { addNewUser, resetAddNewUser } from '@/lib/redux/features/user/slice/addNewUserSlice'
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 

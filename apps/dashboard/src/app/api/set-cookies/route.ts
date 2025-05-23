@@ -13,3 +13,12 @@ export async function POST(req: Request) {
     status: 200,
   })
 }
+
+export async function GET() {
+  const cookieStore = await cookies();
+  // const token = cookies().get('token')?.value;
+
+  const cookie = cookieStore.get('token');
+
+  return Response.json({ token: cookie?.value });
+}

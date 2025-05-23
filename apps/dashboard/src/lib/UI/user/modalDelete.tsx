@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { deleteUser, resetDeleteUser } from '@/lib/redux/features/user/deleteUserSlice'
+import { deleteUser, resetDeleteUser } from '@/lib/redux/features/user/slice/deleteUserSlice'
 
 import { IoWarningOutline } from "react-icons/io5";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -20,6 +20,10 @@ export default function ModalDelete({ handleClose, id } : ModalProps) {
     useEffect(() => {
         if(delete_user.success && isSubmit === true) {
             handleClose();
+            setIsSubmit(false);
+        }
+        else if(delete_user.error && isSubmit === true)
+        {
             setIsSubmit(false);
         }
     }, [delete_user]);

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { API_ENDPOINT } from "../init/apiUrl";
+import { RootState } from '@/lib/redux/store';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 type InitState = {
@@ -21,17 +23,24 @@ type NewUser = {
     role?: string
 }
 
-export const addNewUser = createAsyncThunk(
+export const addNewUser = createAsyncThunk<
+  Record<string, unknown>, // tipe return value
+  NewUser, // tipe argumen
+  { state: RootState } // ini penting
+>(
     'user/addNewUser',
-    async(data: NewUser, { getState, rejectWithValue }) => {
+    async(data, { getState, rejectWithValue }) => {
         try {
+            const { token  } = getState();
+
             const CONFIG = {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${token.token}`
                 }
             }
 
-            const res = await axios.post('http://localhost:3001/api/users', data, CONFIG);
+            const res = await axios.post(API_ENDPOINT.ADD_NEW_USER, data, CONFIG);
             return res.data;
         } catch (error: any) {
             const message =

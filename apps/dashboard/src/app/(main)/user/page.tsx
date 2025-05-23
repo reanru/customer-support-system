@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 
-import { getListUser, resetGetListUser } from '@/lib/redux/features/user/getListUserSlice'
+import { getListUser, resetGetListUser } from '@/lib/redux/features/user/slice/getListUserSlice'
 
 import { FaPlusSquare, FaRegTrashAlt } from "react-icons/fa";
 
@@ -37,7 +37,7 @@ export default function UserPage() {
 
     useEffect(() => {
         if(get_list_user.success){
-            // console.log('testing check 1', get_list_user);
+            console.log('testing check 1', get_list_user);
             setListUser(get_list_user.data.data);
         }
     }, [get_list_user])

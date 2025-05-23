@@ -1,38 +1,33 @@
-"use client"
-
 // import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// import { Providers } from './provider';
+import Providers from "../components/providers";
 
-import { Provider } from 'react-redux';
-import store from '@/lib/redux/store'
+import { cookies } from 'next/headers';
+import TokenHandler from "./components/tokenHandler";
 
-
-import { useState } from "react";
-
-type Button = {
-  handleOpen: () => void
-}
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: { children: React.ReactNode }) {
 
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const cookieStore = await cookies();
+  console.log('testing root layout ', cookieStore.get('token')?.value);
+  
 
   return (
-        <Provider store={store}>
-      <html lang="en">
-        <body
-          className="bg-slate-100"
-          >
-              { children }
-        </body>
-      </html>
-            </Provider>
+    <>
+        {/* <TokenHandler token={cookieStore.get('token')?.value ?? ''} /> */}
+        <html lang="en">
+          <body
+            className="bg-slate-100"
+            >
+              <Providers token={cookieStore.get('token')?.value ?? ''}>
+                { children }
+              </Providers>
+          </body>
+        </html>
+    </>
   );
 }
+

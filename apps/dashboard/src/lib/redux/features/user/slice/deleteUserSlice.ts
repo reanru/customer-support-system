@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { API_ENDPOINT } from "../init/apiUrl";
+import { RootState } from '@/lib/redux/store';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 type InitState = {
@@ -15,17 +17,25 @@ const initialState: InitState = {
   success: false,
 };
 
-export const getListUser = createAsyncThunk(
-    'user/getListUser',
-    async(_, { getState, rejectWithValue }) => {
+export const deleteUser = createAsyncThunk<
+  Record<string, unknown>, // tipe return value
+  string, // tipe argumen
+  { state: RootState } // ini penting
+>(
+    'user/deleteUser',
+    async(id, { getState, rejectWithValue }) => {
         try {
+            const { token  } = getState();
+
             const CONFIG = {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${token.token}`
                 }
             }
-
-            const res = await axios.get('http://localhost:3001/api/users?page=1&size=10', CONFIG);
+            
+            // console.log('testing delete ', id);
+            const res = await axios.delete(API_ENDPOINT.DELETE_USER(id), CONFIG);
             return res.data;
         } catch (error: any) {
             const message =
@@ -35,11 +45,11 @@ export const getListUser = createAsyncThunk(
     }
 )
 
-const getListUserSlice = createSlice({
-    name: 'listUser',
+const deleteUserSlice = createSlice({
+    name: 'deleteUser',
     initialState,
     reducers: {
-        resetGetListUser: (state) => {
+        resetDeleteUser: (state) => {
             state.loading = false;
             state.data = null;
             state.error = null;
@@ -47,21 +57,21 @@ const getListUserSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(getListUser.pending, (state) => {
+        .addCase(deleteUser.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
-        .addCase(getListUser.fulfilled, (state, action) => {
+        .addCase(deleteUser.fulfilled, (state, action) => {
             state.loading = false;
             state.data = action.payload.data;
             state.success = true;
         })
-        .addCase(getListUser.rejected, (state, action) => {
+        .addCase(deleteUser.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
         })
     }
 });
 
-export const { resetGetListUser } = getListUserSlice.actions;
-export default getListUserSlice.reducer;
+export const { resetDeleteUser } = deleteUserSlice.actions;
+export default deleteUserSlice.reducer;

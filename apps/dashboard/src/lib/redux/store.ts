@@ -1,14 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import getListUserReducer from './features/user/getListUserSlice';
-import addNewUserReducer from './features/user/addNewUserSlice';
-import deleteUserReducer from './features/user/deleteUserSlice';
-import loginUserReducer from './features/login/loginUserSlice';
+
+import { combineUserReducers } from '@/lib/redux/features/user/init/store'
+
+import loginUserReducer from './features/auth/slice/loginUserSlice';
+
+import tokenReducer from "./features/auth/slice/tokenHandlerSlice";
 
 const store = configureStore({
   reducer: {
-    get_list_user: getListUserReducer,
-    add_new_user: addNewUserReducer,
-    delete_user: deleteUserReducer,
+    ...combineUserReducers,
+    token: tokenReducer,
     login_user: loginUserReducer
   }
 });

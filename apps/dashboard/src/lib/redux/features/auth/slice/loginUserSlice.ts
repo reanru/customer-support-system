@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { API_ENDPOINT } from "../init/apiUrl";
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 type InitState = {
@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk(
                 }
             }
 
-            const res = await axios.post('http://localhost:3001/api/users/login', data, CONFIG);
+            const res = await axios.post(API_ENDPOINT.LOGIN_USER, data, CONFIG);
             await axios.post('http://localhost:3000/api/set-cookies', {token: res.data.data.token});
 
             return res.data;
