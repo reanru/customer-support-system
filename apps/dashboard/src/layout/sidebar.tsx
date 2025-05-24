@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from "next/link"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
+import { BiMessageSquareDetail } from "react-icons/bi";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { LuUsers, LuLogs } from "react-icons/lu";
 import { PiGear } from "react-icons/pi";
@@ -12,6 +13,7 @@ import { PiGear } from "react-icons/pi";
 const menus = [
     { text: "Dashboard", link: '/', icon: <MdOutlineDashboardCustomize className="text-xl" /> },
     { text: "User", link: '/user', icon: <LuUsers className="text-xl" /> },
+    { text: "Conversation", link: '/conversation', icon: <BiMessageSquareDetail className="text-xl" /> },
     { text: "Logs", link: '/logs', icon: <LuLogs className="text-xl" /> },
     { text: "Setting", link: '/setting', icon: <PiGear className="text-xl" /> },
 ]
