@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import userService from "../service/user-service"
 
+import bcrypt from "bcrypt";
+
 type User = {
     id: string,
     name: string,
@@ -50,7 +52,7 @@ const getList = async (req: Request, res: Response, next: NextFunction) => {
 const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req.body;
-        // console.log('testing create ',request);
+        request.password = await bcrypt.hash('agent123', 10);
         
         const result = await userService.create(request);
 

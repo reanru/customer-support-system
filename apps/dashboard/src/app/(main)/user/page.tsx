@@ -64,7 +64,7 @@ export default function UserPage() {
                 <ModalDelete handleClose={()=>setOpenModalDelete(false)} id={selectedUser?.id ?? ''} />
             ) }
 
-            <div className="card relative overflow-x-auto space-y-3">
+            <div className="card overflow-x-auto space-y-3">
                 <button onClick={()=>setOpenModalCreate(true)} type="button" className="btn-primary">
                     <span>Create</span>
                     <FaPlusSquare />

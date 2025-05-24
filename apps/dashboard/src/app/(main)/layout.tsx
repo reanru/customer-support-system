@@ -1,26 +1,44 @@
 "use client"
 
+import { useEffect, useState } from "react";
+
 import Navbar from "@/layout/navbar";
 import Sidebar from "@/layout/sidebar";
 
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-
 import { getProfile, resetGetProfile } from '@/lib/redux/features/user/slice/getProfileSlice'
 
-// import { Provider } from 'react-redux';
-// import store from '@/lib/redux/store';
-
-import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import {io, Socket} from 'socket.io-client';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const get_rofile = useAppSelector((state) => state.get_rofile);
+  const get_profile = useAppSelector((state) => state.get_profile);
   const dispatch = useAppDispatch();
 
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
     dispatch(getProfile());
   }, [])
+
+  useEffect(() => {
+    if(get_profile.success){
+      // console.log('testing get_profile ', get_rofile.data.id);
+      
+      // Menghubungkan ke server Socket.IO
+      const newSocket = io('http://localhost:3001');                
+      setSocket(newSocket);     
+      
+      newSocket.emit('join-room-agent', get_profile.data.id);
+
+      return () => {
+          console.log('disconnect');
+          newSocket.disconnect();    
+      }
+    }
+  }, [get_profile])
+  
   
   return (
         <div className="flex h-full gap-4">
