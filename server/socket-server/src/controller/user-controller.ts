@@ -1,10 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
 import userService from "../service/user-service"
 
-const getList = async (req:any, res:any, next:any) => {
+type User = {
+    id: string,
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+}
+
+interface CustomRequest extends Request {
+    user?: User;
+}
+
+const getProfile = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.user?.id ?? '';
+
+        const result = await userService.getProfile(userId);
+        
+        res.status(200).json({
+            data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+const getList = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = {
-            search: req.query.search ?? "",
+            search: typeof req.query.search === 'string' ? req.query.search : '',
             page: Number(req.query.page),
             size: Number(req.query.size),
         }
@@ -72,6 +98,7 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export default {
+    getProfile,
     getList,
     create,
     update,

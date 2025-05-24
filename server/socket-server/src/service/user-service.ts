@@ -10,26 +10,27 @@ type GetType = {
     size: number
 }
 
-// const getProfile = async (id: string) => {
-//     username = validate(getUserValidation, username);
+const getProfile = async (userId: string) => {
+    // userId = validate(idUserValidation, userId);
 
-//     const user = await prismaClient.user.findFirst({
-//         where: {
-//             username: username
-//         },
-//         select: {
-//             id: true,
-//             username: true,
-//             name: true
-//         }
-//     });
+    const user = await prismaClient.user.findFirst({
+        where: {
+            id: userId
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+        }
+    });
 
-//     if(!user){
-//         throw new ResponseError(404, "User is not found");
-//     }
+    if(!user){
+        throw new ResponseError(404, "User is not found");
+    }
 
-//     return user;
-// }
+    return user;
+}
 
 const getList = async (request: GetType) => {
 
@@ -120,13 +121,13 @@ const update = async (request: Request) => {
 const remove = async (userId: string) => {
     userId = validate(removeUserValidation, userId);
 
-    const contactCount = await prismaClient.user.count({
+    const userCount = await prismaClient.user.count({
         where: {
             id: userId
         }
     });
 
-    if(contactCount !== 1){
+    if(userCount !== 1){
         throw new ResponseError(404, "User is not found");
     }
 
@@ -138,6 +139,7 @@ const remove = async (userId: string) => {
 }
 
 export default {
+    getProfile,
     getList,
     create,
     update,

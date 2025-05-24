@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
+router.get('/api/users/profile', userController.getProfile);
 router.get('/api/users', userController.getList);
 router.post('/api/users', userController.create);
 router.put('/api/users/:userId', userController.update);

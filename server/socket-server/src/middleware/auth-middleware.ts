@@ -1,7 +1,11 @@
-import  jwt  from "jsonwebtoken";
+import  jwt, { JwtPayload }  from "jsonwebtoken";
 import { Request, Response, NextFunction } from 'express';
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+interface CustomRequest extends Request {
+    user?: string | JwtPayload;
+}
+
+export const authMiddleware = (req: CustomRequest, res: Response, next: NextFunction) => {
     const token = req.get('Authorization');
 
     if(!token){
@@ -12,8 +16,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     try {
-        jwt.verify(token ?? '', process.env.JWT_SECRET_KEY!);
-
+        const user = jwt.verify(token ?? '', process.env.JWT_SECRET_KEY!);
+        
+        req.user = user;
         next();
     } catch (error) {
         res.status(401).json({
