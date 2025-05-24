@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import userService from "../service/user-service"
 
-const get = async (req:any, res:any, next:any) => {
+const getList = async (req:any, res:any, next:any) => {
     try {
         const request = {
             search: req.query.search ?? "",
@@ -11,7 +11,7 @@ const get = async (req:any, res:any, next:any) => {
 
         // console.log('check ', typeof request.page, typeof request.size);
 
-        const result = await userService.get(request);
+        const result = await userService.getList(request);
 
         res.status(200).json({
             data: result
@@ -72,7 +72,7 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export default {
-    get,
+    getList,
     create,
     update,
     remove

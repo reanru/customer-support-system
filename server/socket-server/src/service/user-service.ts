@@ -10,7 +10,28 @@ type GetType = {
     size: number
 }
 
-const get = async (request: GetType) => {
+// const getProfile = async (id: string) => {
+//     username = validate(getUserValidation, username);
+
+//     const user = await prismaClient.user.findFirst({
+//         where: {
+//             username: username
+//         },
+//         select: {
+//             id: true,
+//             username: true,
+//             name: true
+//         }
+//     });
+
+//     if(!user){
+//         throw new ResponseError(404, "User is not found");
+//     }
+
+//     return user;
+// }
+
+const getList = async (request: GetType) => {
 
     const skip = (request.page - 1) * request.size;
 
@@ -117,7 +138,7 @@ const remove = async (userId: string) => {
 }
 
 export default {
-    get,
+    getList,
     create,
     update,
     remove
