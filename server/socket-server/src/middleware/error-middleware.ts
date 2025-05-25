@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ResponseError } from "../error/response-error"
+import { ResponseError } from "../_class/ResponseError"
 
 const errorMiddleware = async (err: any, req: Request, res: Response, next: NextFunction) => {
     if(!err){

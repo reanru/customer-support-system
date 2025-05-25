@@ -2,7 +2,7 @@ import { validate } from "../validation/_validation";
 // import {  } from "../validation/"
 import { createUserValidation, updateUserValidation, removeUserValidation } from "../validation/user-validation"
 import { prismaClient } from "../application/database";
-import { ResponseError } from "../error/response-error";
+import { ResponseError } from "../_class/ResponseError";
 
 type GetType = {
     search: string,

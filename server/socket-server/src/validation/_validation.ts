@@ -1,4 +1,4 @@
-import { ResponseError } from "../error/response-error";
+import { ResponseError } from "../_class/ResponseError";
 
 const validate = <T>(schema: any, request: T) => {
     const result = schema.validate(request, {

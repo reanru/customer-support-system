@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { prismaClient } from "../application/database";
-import { ResponseError } from "../error/response-error";
+import { ResponseError } from "../_class/ResponseError";
 import { validate } from "../validation/_validation";
 import { loginValidation } from "../validation/auth-validation";
 import bcrypt from "bcrypt";

@@ -28,6 +28,8 @@ io.on('connection', (socket) => {
     console.log(`User ${socket.id} connected`);
 
     socket.on('init-session', async (data) => {
+        console.log('Available agent ', manager.getAll().length, ' - ', manager.getAll().map(data => { return data.agent }).join(', '));
+
         const checkSession = await prismaClient.session.findFirst({
             where: {
                 visitorId: data
@@ -39,14 +41,11 @@ io.on('connection', (socket) => {
                 data: {
                     visitorId: data,
                     isActive: true,
-                    assignedTo: manager.getAll()[0].agent ?? null
+                    assignedTo: manager.getAll()[0]?.agent ?? null
                 },
             });
 
-        }
-
-        console.log('Available agent ', manager.getAll().length, ' - ', manager.getAll().map(data => { return data.agent }).join(', '));
-        
+        }        
 
         socket.join(data);
         // io.to(data).emit('receiveMessage', data);
