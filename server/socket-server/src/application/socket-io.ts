@@ -51,11 +51,11 @@ io.on('connection', (socket) => {
             });
 
             io.to(AGENT_ROOM).emit('init-session', session);
-        }        
+        }
 
+        socket.join(visitorId);
         // console.log('visitor init-session ', socket.id);
         console.log(`Visitor ${socket.id} joined rooms: ${visitorId} `, manager.getAll().map(data => { return data.agent }).join(', '));
-        // socket.join(visitorId);
         // io.to(data).emit('receiveMessage', data);
     });
 

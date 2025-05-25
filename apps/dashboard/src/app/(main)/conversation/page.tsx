@@ -1,6 +1,8 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+
+import { SocketContext } from "@/lib/context/socketContext";
 
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { getListConversation, resetGetListConversation } from '@/lib/redux/features/conversation/slice/getListConversationSlice'
@@ -23,10 +25,25 @@ type User = {
 }
 
 export default function ConversationPage() {
+    const get_profile = useAppSelector((state) => state.get_profile);
     const get_list_conversation = useAppSelector((state) => state.get_list_conversation);
     const dispatch = useAppDispatch();
 
+    // const socket = useSocket();
+    const socket = useContext(SocketContext);
+
     const [listConversation, setListConversation] = useState([]);
+
+    useEffect(() => {
+        if(socket){
+            // console.log('testing get_profile 1 ', socket);
+            socket.on('init-session', (data) => {
+                console.log('testing get init-session ', get_profile.data.id === data.assigned_to, get_profile.data.id, data.assigned_to);
+                if(get_profile.data.id === data.assigned_to){
+                }
+            });
+        }
+    }, [socket]);
 
     useEffect(() => {        
         dispatch(getListConversation());
@@ -34,10 +51,10 @@ export default function ConversationPage() {
 
     useEffect(() => {
         if(get_list_conversation.success){
-            console.log('testing get conversation', get_list_conversation);
+            // console.log('testing get conversation', get_list_conversation);
             setListConversation(get_list_conversation.data.data);
         }
-    }, [get_list_conversation])
+    }, [get_list_conversation]);    
 
     return (
         <>

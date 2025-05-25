@@ -11,6 +11,9 @@ import { getProfile, resetGetProfile } from '@/lib/redux/features/user/slice/get
 import { v4 as uuidv4 } from 'uuid';
 import {io, Socket} from 'socket.io-client';
 
+import { SocketContext } from "@/lib/context/socketContext";
+import { initSocket } from "@/lib/socket/socket";
+
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const get_profile = useAppSelector((state) => state.get_profile);
   const dispatch = useAppDispatch();
@@ -23,39 +26,41 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }, [])
 
   useEffect(() => {
-    if(get_profile.success){
-      // console.log('testing get_profile ', get_rofile.data.id);
-      
-      // Menghubungkan ke server Socket.IO
-      const newSocket = io('http://localhost:3001');                
-      setSocket(newSocket);     
-      
-      newSocket.emit('join-room-agent', get_profile.data.id);
+    if(get_profile.success){      
+
+      const sock = initSocket();
+      setSocket(sock);
+
+      sock.emit('join-room-agent', get_profile.data.id);
+
+      console.log('testing get_profile ', sock);
 
       return () => {
           console.log('disconnect');
-          newSocket.disconnect();    
+          sock.disconnect();    
       }
     }
   }, [get_profile])
   
     useEffect(() => {
       if(socket){
-        socket.on('init-session', (data) => {
-          console.log('testing get init-session ', data);
-        });
+        // socket.on('init-session', (data) => {
+        //   console.log('testing get init-session ', data);
+        // });
       }
     }, [socket])
   
   return (
-        <div className="flex h-full gap-4">
-          <Sidebar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
-          <div className="relative flex flex-1 gap-4 flex-col">
-            <Navbar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
-              <main className="pl-5 lg:pl-1 pr-5">
-                {children}
-              </main>
+        <SocketContext.Provider value={socket}>
+          <div className="flex h-full gap-4">
+            <Sidebar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
+            <div className="relative flex flex-1 gap-4 flex-col">
+              <Navbar open={openSidebar} handleOpen={()=>setOpenSidebar(!openSidebar)} />
+                <main className="pl-5 lg:pl-1 pr-5">
+                  {children}
+                </main>
+            </div>
           </div>
-        </div>
+        </SocketContext.Provider>
   );
 }

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { combineAuthReducers } from '@/lib/redux/features/auth/init/store'
-import { combineUserReducers } from '@/lib/redux/features/user/init/store'
+import { combineAuthReducers } from './features/auth/init/store'
+import { combineUserReducers } from './features/user/init/store'
 import { combineConversationReducers } from './features/conversation/init/store';
 
 const store = configureStore({
