@@ -87,9 +87,9 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.userId;
 
-        // console.log('testing remove ', userId)
+        console.log('testing remove ', req.params)
 
-        await userService.remove(userId);
+        // await userService.remove(userId);
 
         res.status(200).json({
             data: "OK"
