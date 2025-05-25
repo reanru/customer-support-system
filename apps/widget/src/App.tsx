@@ -14,12 +14,15 @@ function App() {
     const newSocket = io('http://localhost:3001');                
     setSocket(newSocket);     
 
-    const visitor = localStorage.getItem("visitor");
+    let visitor = localStorage.getItem("visitor");
 
-    if(!visitor) localStorage.setItem("visitor", uuidv4());
-    // else newSocket.emit('init-session', visitor);
+    if(!visitor){      
+      const uuid = uuidv4();
+      localStorage.setItem("visitor", uuid);
+      visitor = uuid;
+    }
     
-    newSocket.emit('init-session', visitor);
+    newSocket.emit('join-room-visitor', visitor);
 
     return () => {
         console.log('disconnect');

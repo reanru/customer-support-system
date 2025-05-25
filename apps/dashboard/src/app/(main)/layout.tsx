@@ -39,6 +39,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }
   }, [get_profile])
   
+    useEffect(() => {
+      if(socket){
+        socket.on('init-session', (data) => {
+          console.log('testing get init-session ', data);
+        });
+      }
+    }, [socket])
   
   return (
         <div className="flex h-full gap-4">

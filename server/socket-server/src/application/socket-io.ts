@@ -23,37 +23,40 @@ type AvailableAgent = {
 
 const manager = new AvailableAgentManager();
 
+const AGENT_ROOM = 'AGENT-ROOM';
+
 // Event ketika klien terhubung ke server Socket.IO
 io.on('connection', (socket) => {
     console.log(`User ${socket.id} connected`);
 
-    socket.on('init-session', async (data) => {
+    socket.join(AGENT_ROOM);
+
+    // Menangani permintaan masuk room untuk visitor
+    socket.on('join-room-visitor', async (visitorId) => {
         // console.log('Available agent ', manager.getAll().length, ' - ', manager.getAll().map(data => { return data.agent }).join(', '));
 
         const checkSession = await prismaClient.session.findFirst({
             where: {
-                visitor_id: data
+                visitor_id: visitorId
             }
         });
 
         if(!checkSession){
-            await prismaClient.session.create({
+            const session = await prismaClient.session.create({
                 data: {
-                    visitor_id: data,
+                    visitor_id: visitorId,
                     status: 'WAITING',
                     assigned_to: manager.getAll()[0]?.agent ?? null
                 },
             });
 
+            io.to(AGENT_ROOM).emit('init-session', session);
         }        
 
-        socket.join(data);
+        // console.log('visitor init-session ', socket.id);
+        console.log(`Visitor ${socket.id} joined rooms: ${visitorId} `, manager.getAll().map(data => { return data.agent }).join(', '));
+        // socket.join(visitorId);
         // io.to(data).emit('receiveMessage', data);
-    });
-
-    // Menangani permintaan masuk room untuk visitor
-    socket.on('joinRoomVisitor', (room) => {
-        // console.log(`Visitor ${socket.id} joined rooms: ${room}`);
     });
 
     // Menangani permintaan masuk room untuk agant
