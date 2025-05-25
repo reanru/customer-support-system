@@ -32,16 +32,16 @@ io.on('connection', (socket) => {
 
         const checkSession = await prismaClient.session.findFirst({
             where: {
-                visitorId: data
+                visitor_id: data
             }
         });
 
         if(!checkSession){
             await prismaClient.session.create({
                 data: {
-                    visitorId: data,
-                    isActive: true,
-                    assignedTo: manager.getAll()[0]?.agent ?? null
+                    visitor_id: data,
+                    status: 'WAITING',
+                    assigned_to: manager.getAll()[0]?.agent ?? null
                 },
             });
 

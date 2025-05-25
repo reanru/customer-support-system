@@ -15,41 +15,43 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  name        String?
-  email       String?
-  password    String?   
-  role        Role     @default(USER) // 'ADMIN' | 'AGENT' | 'USER'
+  id            String   @id @default(uuid())
+  name          String?
+  email         String?
+  password      String?   
+  role          Role     @default(USER) // 'ADMIN' | 'AGENT' | 'USER'
   // sessions    Session[]
-  messages    Message[]
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  messages      Message[]
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   @@map("users")
 }
 
 model Session {
-  id          String   @id @default(uuid())
+  id            String   @id @default(uuid())
   // user_id     String?
   // user        User?    @relation(fields: [user_id], references: [id])
-  visitorId   String?  // Untuk sesi anonim
-  isActive    Boolean  @default(true)
-  messages    Message[]
-  assignedTo  String? // Agent ID
-  createdAt   DateTime @default(now())
+  visitor_id    String?  // Untuk sesi anonim
+  // isActive    Boolean  @default(true)
+  status        SessionStatus
+  messages      Message[]
+  assigned_to   String? // Agent ID
+  created_at    DateTime @default(now())
 
   @@map("sessions")
 }
 
 model Message {
-  id         String   @id @default(uuid())
-  sessionId  String
-  session    Session  @relation(fields: [sessionId], references: [id])
-  senderId   String?
-  sender     User?    @relation(fields: [senderId], references: [id])
-  from       Role     // ADMIN | AGENT | USER
-  content    String
-  createdAt  DateTime @default(now())
+  id            String   @id @default(uuid())
+  session_id    String
+  session       Session  @relation(fields: [session_id], references: [id])
+  sender_id     String?
+  sender        User?    @relation(fields: [sender_id], references: [id])
+  sender_type   Role     // ADMIN | AGENT | USER
+  content       String
+  read_at       DateTime?
+  created_at    DateTime @default(now())
 
   @@map("messages")
 }
@@ -58,4 +60,14 @@ enum Role {
   ADMIN
   AGENT
   USER
+}
+
+enum SessionStatus {
+  WAITING
+  ASSIGNED
+  ACTIVE
+  RESOLVED
+  CLOSED
+  EXPIRED
+  ABANDONED
 }
