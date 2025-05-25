@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     console.log(`User ${socket.id} connected`);
 
     socket.on('init-session', async (data) => {
-        console.log('Available agent ', manager.getAll().length, ' - ', manager.getAll().map(data => { return data.agent }).join(', '));
+        // console.log('Available agent ', manager.getAll().length, ' - ', manager.getAll().map(data => { return data.agent }).join(', '));
 
         const checkSession = await prismaClient.session.findFirst({
             where: {
