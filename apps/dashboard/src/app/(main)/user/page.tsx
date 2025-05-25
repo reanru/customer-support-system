@@ -37,7 +37,7 @@ export default function UserPage() {
 
     useEffect(() => {
         if(get_list_user.success){
-            console.log('testing check 1', get_list_user);
+            // console.log('testing check 1', get_list_user);
             setListUser(get_list_user.data.data);
         }
     }, [get_list_user])
