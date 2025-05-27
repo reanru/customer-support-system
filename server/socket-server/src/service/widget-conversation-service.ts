@@ -12,13 +12,10 @@ const getDetail = async (visitorId: string) => {
         select: {
             id: true,
             assigned_to: true,
-            messages: true
-            // messages: {
-            //     select: {
-            //         content: true,
-            //         created_at: true
-            //     }
-            // }
+            // messages: true
+            messages: {
+                orderBy: { created_at: 'asc' },
+            }
         }
     });
 

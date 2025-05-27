@@ -7,21 +7,26 @@ import { SocketContext } from "@/lib/context/socketContext";
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { getListConversation, resetGetListConversation } from '@/lib/redux/features/conversation/slice/getListConversationSlice'
 
-import { FiUser } from "react-icons/fi";
-import { BiMessageSquareDetail, BiMessageSquare } from "react-icons/bi";
+import ModalMessage from '@/lib/UI/conversation/modalMessage';
+import ConversationDetail from '@/lib/UI/conversation/conversationDetail';
 
-const list = [
-    { isActive: true, newMessage: true },
-    { isActive: false, newMessage: false },
-]
+type Session = {
+    id: string,
+    visitor_id: string | null,
+    status: string,
+    assigned_to: string,
+    created_at: string,
+    messages: Message[]
+}
 
-type User = {
+type Message = {
     id?: string,
-    name?: string,
-    email?: string,
-    role?: string,
-    created_at?: string,
-    updated_at?: string
+    session_id?: string,
+    sender_id?: string,
+    sender_type?: string,
+    content?: string,
+    read_at?: string | null,
+    created_at?: string
 }
 
 export default function ConversationPage() {
@@ -31,19 +36,27 @@ export default function ConversationPage() {
 
     // const socket = useSocket();
     const socket = useContext(SocketContext);
+    const [openMessage, setOpenMessage] = useState<Session | null>(null);
 
     const [listConversation, setListConversation] = useState([]);
 
     useEffect(() => {
         if(socket){
-            // console.log('testing get_profile 1 ', socket);
-            socket.on('init-session', (data) => {
-                console.log('testing get init-session ', get_profile.data.id === data.assigned_to, get_profile.data.id, data.assigned_to);
-                if(get_profile.data.id === data.assigned_to){
-                }
-            });
+            socket.on('init-session', handlerEventInitSession);
         }
+
+        return () => {
+            socket?.off('init-session', handlerEventInitSession);  
+        };
     }, [socket]);
+
+    const handlerEventInitSession = (data: Session) => {
+        if(get_profile.data.id === data.assigned_to){
+            // console.log('testing get init-session ', get_profile.data.id === data.assigned_to, data);
+
+            socket?.emit('join-room-agent', [data.visitor_id]); // assigned_to (visitorId) -> as room
+        }
+    }
 
     useEffect(() => {        
         dispatch(getListConversation());
@@ -53,55 +66,35 @@ export default function ConversationPage() {
         if(get_list_conversation.success){
             // console.log('testing get conversation', get_list_conversation);
             setListConversation(get_list_conversation.data.data);
+
+            socket?.emit('join-room-agent', [get_list_conversation.data.data.map((e:Session)=>{return e.visitor_id})]);
         }
     }, [get_list_conversation]);    
 
     return (
         <>
+            { openMessage && (
+                <ModalMessage 
+                    handleClose={()=>setOpenMessage(null)}
+                    sessionId={openMessage.id ?? ''}
+                    visitorId={openMessage.visitor_id ?? ''}
+                    agentId={get_profile.data.id ?? ''}
+
+                />
+            ) }
             <div className="mb-3 card h-14 p-4 items-center">
                 <h3 className="font-semibold text-blue-800">Your Recent Conversations </h3>
             </div>
             <div className="space-y-2">
-                { listConversation.map((data,key) => (
-                    <div key={key} className="card flex items-center justify-between">
-                        <div>
-                            <span className="text-gray-700 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </span>
-                        </div>
-                        <div className="flex items-center gap-5">
-                            <div className="relative flex items-center gap-2">
-                                <div className="bg-gray-200 flex items-center justify-center h-9 w-9 rounded-full">
-                                    <FiUser className="h-5 w-5 text-gray-500" />
-                                </div>
-                                <div className="text-gray-700">
-                                    <div className="text-sm whitespace-nowrap">Jese Leos</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400">User</div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center h-9 px-4 border border-gray-300 w-32 rounded-bl-full rounded-r-full">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-2 w-2 rounded-full bg-blue-600"></div>
-                                    <span className="text-xs font-semibold">In Progress</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="relative">
-                                    <BiMessageSquareDetail className="text-xl"/>
-                                    <div className="absolute top-0 right-0 h-1 w-1 rounded-full bg-rose-500 ring-3 ring-white"></div>
-                                </div>
-                                {/* { data.newMessage && (
-                                    <div className="relative">
-                                        <BiMessageSquareDetail className="text-xl"/>
-                                        <div className="absolute top-0 right-0 h-1 w-1 rounded-full bg-rose-500 ring-3 ring-white"></div>
-                                    </div>
-                                ) }
-                                { !data.newMessage && (
-                                    <div><BiMessageSquare className="text-xl text-gray-300" /></div>
-                                ) } */}
-                            </div>
-                        </div>
-                    </div>
+                { listConversation.map((data: Session,key) => (
+                    <ConversationDetail 
+                        key={key}
+                        handleOpenModal={()=>setOpenMessage(data)}
+                        sessionId={data.id ?? ''}
+                        visitorId={data.visitor_id ?? ''}
+                        messages={data.messages ?? []}
+                        sessionOpened={openMessage?.id === data.id ? true : false}
+                    />
                 )) }
             </div>
         </>

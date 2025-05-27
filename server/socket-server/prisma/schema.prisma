@@ -19,9 +19,9 @@ model User {
   name          String?
   email         String?
   password      String?   
-  role          Role     @default(USER) // 'ADMIN' | 'AGENT' | 'USER'
+  role          Role     @default(AGENT) // 'ADMIN' | 'AGENT' | 'USER'
   // sessions    Session[]
-  messages      Message[]
+  // messages      Message[]
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
@@ -47,7 +47,7 @@ model Message {
   session_id    String
   session       Session  @relation(fields: [session_id], references: [id])
   sender_id     String?
-  sender        User?    @relation(fields: [sender_id], references: [id])
+  // sender        User?    @relation(fields: [sender_id], references: [id])
   sender_type   Role     // ADMIN | AGENT | USER
   content       String
   read_at       DateTime?
@@ -57,9 +57,9 @@ model Message {
 }
 
 enum Role {
-  ADMIN
+  VISITOR
   AGENT
-  USER
+  ADMIN
 }
 
 enum SessionStatus {

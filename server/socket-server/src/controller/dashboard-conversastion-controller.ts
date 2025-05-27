@@ -21,7 +21,7 @@ const getList = async (req: CustomRequest, res: Response, next: NextFunction) =>
             size: Number(req.query.size),
         }
 
-        console.log('check ', request.page, typeof request.size);
+        // console.log('check ', request.page, typeof request.size);
 
         const result = await dashboaordConversationService.getList(request);
 

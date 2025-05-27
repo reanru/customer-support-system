@@ -31,9 +31,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       const sock = initSocket();
       setSocket(sock);
 
-      sock.emit('join-room-agent', get_profile.data.id);
+      sock.emit('available-agent', get_profile.data.id);
 
-      console.log('testing get_profile ', sock);
+      // console.log('testing get_profile ', sock);
 
       return () => {
           console.log('disconnect');
@@ -42,13 +42,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }
   }, [get_profile])
   
-    useEffect(() => {
-      if(socket){
-        // socket.on('init-session', (data) => {
-        //   console.log('testing get init-session ', data);
+  useEffect(() => {
+    if(socket){
+        // socket.on('receive-message', (data) => {
+        //     console.log('testing layout receive-message ', data);
         // });
-      }
-    }, [socket])
+    }
+  }, [socket])
   
   return (
         <SocketContext.Provider value={socket}>

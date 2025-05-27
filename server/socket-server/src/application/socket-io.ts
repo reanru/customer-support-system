@@ -59,20 +59,42 @@ io.on('connection', (socket) => {
         // io.to(data).emit('receiveMessage', data);
     });
 
-    // Menangani permintaan masuk room untuk agant
-    socket.on('join-room-agent', (agentId) => {
-        socket.join(agentId);
-
-        // availableAgents.push({ client: socket.id, agent: agentId }); 
+    // Menangani saat agent online
+    socket.on('available-agent', (agentId) => {
         manager.add(socket.id, agentId);
-        // console.log(`Agent ${socket.id} joined rooms: ${agentId}`);
     });
 
-    // Menangani pesan dari klien untuk kirim data ke orang lain
-    socket.on('sendMessage', (data) => {
-        // Mengirim pesan ke semua klien dalam room yang sama
+    // Menangani permintaan masuk room untuk agent -> menggunakan visitorId sebagai room
+    socket.on('join-room-agent', (rooms) => {
+        rooms.forEach((visId: string) => {
+            socket.join(visId);
+            console.log(`Agent ${socket.id} joined rooms: ${visId}`);
+        });
 
-        console.log(`User send to room : ${data.receiver}#${data.sender} - message : ${data.message}`);
+    });
+
+    // Menangani pesan dari agent/visitor untuk kirim lawan bicara
+    socket.on('send-message', async (data) => {
+        // console.log(`User send to room : ${data.receiver}#${data.sender} - message : ${data.message}`);
+
+        const { session_id, sender_id, content, sender_type, room } = data;
+
+        // 1. Validasi sesi dan identitas pengirim
+        const session = await prismaClient.session.findUnique({where: {id: session_id}});
+        // if (!session) return socket.emit('error', { message: 'Invalid session' });
+
+        // 2. Simpan ke database
+        const message = await prismaClient.message.create({
+            data: {
+                session_id: session_id,
+                sender_id: sender_id,
+                sender_type: sender_type,
+                content: content
+            }
+        });
+
+        // 3. Kirim ke lawan bicara melalui room session
+        socket.to(room).emit('receive-message', message);
 
         // io.to(`${data.receiver}#${data.sender}`).emit('receiveMessage', data);
     });
