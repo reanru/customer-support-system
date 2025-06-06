@@ -55,6 +55,8 @@ export default function ConversationPage() {
             // console.log('testing get init-session ', get_profile.data.id === data.assigned_to, data);
 
             socket?.emit('join-room-agent', [data.visitor_id]); // assigned_to (visitorId) -> as room
+
+            dispatch(getListConversation());
         }
     }
 

@@ -83,6 +83,9 @@ io.on('connection', (socket) => {
         const session = await prismaClient.session.findUnique({where: {id: session_id}});
         // if (!session) return socket.emit('error', { message: 'Invalid session' });
 
+        console.log('check session_id ', session_id);
+        
+
         // 2. Simpan ke database
         const message = await prismaClient.message.create({
             data: {

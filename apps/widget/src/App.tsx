@@ -47,6 +47,7 @@ function App() {
       localStorage.setItem("visitor", uuid);
       visitor = uuid;
     }
+
     setVisitorId(visitor);
 
     newSocket.emit('join-room-visitor', visitor);

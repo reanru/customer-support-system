@@ -89,7 +89,7 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
 
         console.log('testing remove ', req.params)
 
-        // await userService.remove(userId);
+        await userService.remove(userId);
 
         res.status(200).json({
             data: "OK"
